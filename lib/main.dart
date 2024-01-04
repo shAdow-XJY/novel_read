@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
+import 'package:novel_read/router/pc/pc_router.dart';
 
-import 'entry/pc_home.dart';
+// import 'pc/pc_home.dart';
 
 void main() {
+  setUrlStrategy(PathUrlStrategy());
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,7 +19,9 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const PCHomePage(title: 'shadow novel'),
+      // home: const PCHomePage(),
+      initialRoute: '/',
+      onGenerateRoute: pcGenerateRoute,
     );
   }
 }

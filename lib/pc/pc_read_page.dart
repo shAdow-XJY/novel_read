@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
-class PCHomePage extends StatefulWidget {
-  const PCHomePage({super.key, required this.title});
-
-  final String title;
-
+class PCReadPage extends StatefulWidget {
+  const PCReadPage({super.key});
   @override
-  State<PCHomePage> createState() => _PCHomePageState();
+  State<PCReadPage> createState() => _PCReadPageState();
 }
 
-class _PCHomePageState extends State<PCHomePage> {
+class _PCReadPageState extends State<PCReadPage> {
   String _selectedFont = 'NotoSerifSC';
   int currentButtonIndex = -1;
   bool showSettingArea = false;
@@ -18,7 +15,7 @@ class _PCHomePageState extends State<PCHomePage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(title: Text("widget.title")),
       body: Stack(
         children: <Widget>[
           // 右侧滚动区域
