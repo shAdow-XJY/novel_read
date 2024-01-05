@@ -7,6 +7,9 @@ class PCReadPage extends StatefulWidget {
 }
 
 class _PCReadPageState extends State<PCReadPage> {
+  /// 页面切换初始化
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   String _selectedFont = 'NotoSerifSC';
   int currentButtonIndex = -1;
   bool showSettingArea = false;
@@ -15,14 +18,75 @@ class _PCReadPageState extends State<PCReadPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text("widget.title")),
+      key: scaffoldKey,
+      appBar: AppBar(
+        title: const Text("chapter name"),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {
+            // 打开左侧 Drawer
+            scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              // 打开右侧 Drawer
+              scaffoldKey.currentState?.openEndDrawer();
+            },
+          ),
+        ],
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('左侧 Drawer 头部'),
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+            ),
+            ListTile(
+              title: Text('项目 1'),
+              onTap: () {
+                // 更新状态或执行其他操作
+                Navigator.pop(context);
+              },
+            ),
+            // 其他 ListTile...
+          ],
+        ),
+      ),
+      endDrawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            DrawerHeader(
+              child: Text('右侧 Drawer 头部'),
+              decoration: BoxDecoration(
+                color: Colors.green,
+              ),
+            ),
+            ListTile(
+              title: Text('项目 A'),
+              onTap: () {
+                // 更新状态或执行其他操作
+                Navigator.pop(context);
+              },
+            ),
+            // 其他 ListTile...
+          ],
+        ),
+      ),
       body: Stack(
         children: <Widget>[
-          // 右侧滚动区域
           Positioned(
             top: 0,
             bottom: 0,
-            left: 100,  // 等于左侧按钮区域宽度
+            left: 0,
             right: 0,
             child: SingleChildScrollView(
               child: Container(
@@ -31,7 +95,7 @@ class _PCReadPageState extends State<PCReadPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '这里是很长的文本...\n\n' * 100,  // 示例文本
+                      '这里是很长的文本...这里是很长的文本...这里是很长的文本...\n\n' * 100,  // 示例文本
                       style: TextStyle(fontFamily: _selectedFont),
                     ),
                     Container(
@@ -39,68 +103,6 @@ class _PCReadPageState extends State<PCReadPage> {
                       child: Text('这里是底部的内容。'),
                     ),
                   ],
-                ),
-              ),
-            ),
-          ),
-          // 左侧按钮区域
-          Positioned(
-            top: 0,
-            bottom: 0,
-            left: 0,
-            child: SizedBox(
-              width: 100,  // 按钮区域宽度
-              child: Column(
-                children: List<Widget>.generate(6, (index) => ElevatedButton(
-                    onPressed: () {
-                      debugPrint("click按钮 ${index + 1}");
-                      if (currentButtonIndex != index) {
-                        setState(() {
-                          currentButtonIndex = index;
-                          showSettingArea = true;
-                        });
-                      } else {
-                        setState(() {
-                          showSettingArea = !showSettingArea;
-                        });
-                      }
-                    },
-                    child: Text('按钮 ${index + 1}')
-                )),
-              ),
-            ),
-          ),
-          Positioned(
-            top: 0,
-            left: 100,
-            child: Visibility(
-              visible: showSettingArea,
-              maintainSize: true,
-              maintainAnimation: true,
-              maintainState: true,
-              child: AnimatedOpacity(
-                opacity: showSettingArea ? 1.0 : 0.0,
-                duration: Duration(seconds: 1),
-                child: Container(
-                  width: size.width * 0.66,
-                  height: size.height * 0.66,
-                  color: Colors.red,
-                  padding: const EdgeInsets.all(16),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '这里是很长的文本...\n\n' * 100,  // 示例文本
-                          style: TextStyle(fontFamily: _selectedFont),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          child: Text('这里是底部的内容。'),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ),
