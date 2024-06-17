@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../view_model/book_model.dart';
+
 class PCHomePage extends StatefulWidget {
   const PCHomePage({super.key});
   @override
@@ -10,19 +12,32 @@ class _PCHomePageState extends State<PCHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("books directory"),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+        automaticallyImplyLeading: false,
+      ),
       body: GridView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 5, // 一行显示两个卡片
-          crossAxisSpacing: 10,
+          crossAxisCount: 5,
+          crossAxisSpacing: 20,
           mainAxisSpacing: 10,
-          childAspectRatio: 0.8, // 卡片的宽高比
+          childAspectRatio: 0.8,
         ),
-        itemCount: 10, // 假设有10个卡片
+        itemCount: 10,
         itemBuilder: (context, index) {
           return InkWell(
+            focusColor: Colors.transparent,
+            hoverColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             onTap: () {
-              // 在这里处理点击事件
-              Navigator.pushNamed(context, '/read');
+              Navigator.pushNamed(
+                context,
+                '/chapterDirectory',
+                arguments: BookModel(bookId: '$index'),
+              );
             },
             child: Card(
               elevation: 5,

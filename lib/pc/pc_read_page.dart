@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../view_model/book_model.dart';
+
 class PCReadPage extends StatefulWidget {
-  const PCReadPage({super.key});
+  final BookModel bookModel;
+
+  const PCReadPage({
+    super.key,
+    required this.bookModel
+  });
+
   @override
   State<PCReadPage> createState() => _PCReadPageState();
 }
@@ -42,22 +50,38 @@ class _PCReadPageState extends State<PCReadPage> {
         ],
       ),
       drawer: Drawer(
-        child: ListView(
+        child: Column(
           children: <Widget>[
-            DrawerHeader(
-              child: Text('左侧 Drawer 头部'),
-              decoration: BoxDecoration(
-                color: Colors.blue,
+            SizedBox(
+              height: 80,
+              width: double.infinity,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: const Text('book name'),
               ),
             ),
-            ListTile(
-              title: Text('项目 1'),
-              onTap: () {
-                // 更新状态或执行其他操作
-                Navigator.pop(context);
-              },
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text('chapter $index'),
+                    onTap: () {
+                      // 更新状态或执行其他操作
+                      Navigator.pop(context);
+                    },
+                  );
+                },
+                separatorBuilder: (context, index) {
+                  return Container(
+                    height: 1,
+                    color: Theme.of(context).primaryColor.withOpacity(0.3), // 使用浅色
+                  );
+                },
+                itemCount: 10,
+              ),
             ),
-            // 其他 ListTile...
           ],
         ),
       ),
@@ -95,7 +119,7 @@ class _PCReadPageState extends State<PCReadPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '这里是很长的文本...这里是很长的文本...这里是很长的文本...\n\n' * 100,  // 示例文本
+                      '这里是很长的文本...这里是很长的文本...这里是很长的文本...\n\n' * 100, // 示例文本
                       style: TextStyle(fontFamily: _selectedFont),
                     ),
                     Container(
