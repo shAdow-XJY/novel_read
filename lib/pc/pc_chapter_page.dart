@@ -16,7 +16,7 @@ class _PCChapterPageState extends State<PCChapterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("chapters directory"),
+        title: Text(widget.bookModel.bookName),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
         automaticallyImplyLeading: true,
@@ -29,21 +29,21 @@ class _PCChapterPageState extends State<PCChapterPage> {
           mainAxisSpacing: 3.0,
           childAspectRatio: 12.0,
         ),
-        itemCount: 10,
+        itemCount: widget.bookModel.chapterList.length,
         itemBuilder: (context, index) {
           return InkWell(
             focusColor: Colors.transparent,
             hoverColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onTap: () {
-              widget.bookModel.chapterId = "$index";
+              widget.bookModel.currentChapterIndex = index;
               Navigator.pushNamed(
                 context,
                 '/read',
                 arguments: widget.bookModel,
               );
             },
-            child: Text("chapter $index. ao!wu~"),
+            child: Text("chapter ${index + 1}. ${widget.bookModel.chapterList.elementAt(index).chapterName}"),
           );
         },
       ),

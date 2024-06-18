@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../view_model/book_model.dart';
+import '../view_model/set_up_data.dart';
 
 class PCHomePage extends StatefulWidget {
   const PCHomePage({super.key});
@@ -9,6 +9,10 @@ class PCHomePage extends StatefulWidget {
 }
 
 class _PCHomePageState extends State<PCHomePage> {
+
+  // 通过单例获取书籍列表
+  final bookList = BookManager.instance.bookList;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +30,7 @@ class _PCHomePageState extends State<PCHomePage> {
           mainAxisSpacing: 10,
           childAspectRatio: 0.8,
         ),
-        itemCount: 10,
+        itemCount: bookList.length,
         itemBuilder: (context, index) {
           return InkWell(
             focusColor: Colors.transparent,
@@ -36,7 +40,7 @@ class _PCHomePageState extends State<PCHomePage> {
               Navigator.pushNamed(
                 context,
                 '/chapterDirectory',
-                arguments: BookModel(bookId: '$index'),
+                arguments: bookList.elementAt(index),
               );
             },
             child: Card(

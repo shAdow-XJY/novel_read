@@ -24,19 +24,17 @@ class _PCReadPageState extends State<PCReadPage> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: const Text("chapter name"),
+        title: Text(widget.bookModel.chapterList.elementAt(widget.bookModel.currentChapterIndex).chapterName),
         centerTitle: true,
         backgroundColor: Theme.of(context).primaryColor,
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         leading: IconButton(
-          icon: const Icon(Icons.menu),
+          icon: const Icon(Icons.keyboard_backspace_rounded),
           onPressed: () {
-            // 打开左侧 Drawer
-            scaffoldKey.currentState?.openDrawer();
+            Navigator.pop(context);
           },
         ),
         actions: <Widget>[
@@ -59,16 +57,18 @@ class _PCReadPageState extends State<PCReadPage> {
                 decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                 ),
-                child: const Text('book name'),
+                child: Text(widget.bookModel.bookName),
               ),
             ),
             Expanded(
               child: ListView.separated(
                 itemBuilder: (context, index) {
                   return ListTile(
-                    title: Text('chapter $index'),
+                    title: Text("chapter ${index + 1}. ${widget.bookModel.chapterList.elementAt(index).chapterName}"),
                     onTap: () {
-                      // 更新状态或执行其他操作
+                      setState(() {
+                        widget.bookModel.currentChapterIndex = index;
+                      });
                       Navigator.pop(context);
                     },
                   );
@@ -79,31 +79,34 @@ class _PCReadPageState extends State<PCReadPage> {
                     color: Theme.of(context).primaryColor.withOpacity(0.3), // 使用浅色
                   );
                 },
-                itemCount: 10,
+                itemCount: widget.bookModel.chapterList.length,
               ),
             ),
           ],
         ),
       ),
       endDrawer: Drawer(
-        child: ListView(
+        child: Column(
           children: <Widget>[
-            DrawerHeader(
-              child: Text('右侧 Drawer 头部'),
-              decoration: BoxDecoration(
-                color: Colors.green,
+            SizedBox(
+              height: 80,
+              width: double.infinity,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                ),
+                child: Text(widget.bookModel.bookName),
               ),
             ),
-            ListTile(
-              title: Text('项目 A'),
-              onTap: () {
-                // 更新状态或执行其他操作
-                Navigator.pop(context);
-              },
-            ),
-            // 其他 ListTile...
           ],
         ),
+      ),
+      floatingActionButton: IconButton(
+        icon: const Icon(Icons.menu),
+        onPressed: () {
+          // 打开左侧 Drawer
+          scaffoldKey.currentState?.openDrawer();
+        },
       ),
       body: Stack(
         children: <Widget>[
@@ -119,7 +122,7 @@ class _PCReadPageState extends State<PCReadPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '这里是很长的文本...这里是很长的文本...这里是很长的文本...\n\n' * 100, // 示例文本
+                      widget.bookModel.chapterList.elementAt(widget.bookModel.currentChapterIndex).chapterContent,
                       style: TextStyle(fontFamily: _selectedFont),
                     ),
                     Container(
